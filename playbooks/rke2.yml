@@ -1,0 +1,10 @@
+- name: Install rancher rke2
+  hosts: k8s_cluster
+  become: true
+  vars:
+    rke2_ha_mode: true
+    rke2_api_ip : 192.168.10.100
+    rke2_server_taint: true
+    rke2_download_kubeconf: true
+  roles:
+  - role: rke2
