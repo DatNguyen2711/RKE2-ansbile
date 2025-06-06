@@ -1,10 +1,10 @@
 [masters]
-rke2-master-01 ansible_host=192.168.10.76 rke2_type=server
-rke2-master-02 ansible_host=192.168.10.77 rke2_type=server
-rke2-master-03 ansible_host=192.168.10.78 rke2_type=server
+rke2-master-01 ansible_host=192.168.10.72 rke2_type=server
+rke2-master-02 ansible_host=192.168.10.73 rke2_type=server
+rke2-master-03 ansible_host=192.168.10.74 rke2_type=server
 
 [workers]
-rke2-worker-01 ansible_host=192.168.10.79 rke2_type=agent
+rke2-worker-01 ansible_host=192.168.10.75 rke2_type=agent
 
 [k8s_cluster:children]
 masters
