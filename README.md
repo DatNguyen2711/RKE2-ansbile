@@ -1,18 +1,3 @@
-## Requirements
-* Ansible 2.10+
-* Change default token:
-```
-## Pre-shared secret token that other server or agent nodes will register with when connecting to the cluster
-rke2_token: defaultSecret12345
-```
-## RKE2 version: Pick a proper version (avoid some ui bugs..)
-```
-rke2_version: v1.22.6+rke2r1
-```
-## 1.22 not require "swap off"
-
-## Inventory file example
-
 This role relies on nodes distribution to `masters` and `workers` inventory groups.
 The RKE2 Kubernetes master/server nodes must belong to `masters` group and worker/agent nodes must be the members of `workers` group. Both groups has to be the children of `k8s_cluster` group.
 
@@ -85,25 +70,35 @@ This playbook will deploy RKE2 to a cluster with HA server(master) control-plane
 ```
 
 
-# Update Ansible > 2.10 to resolve this issue
+# Update cluster
 
+- For example, you run this playbooks to deploy cluster v1.22.
+
+```yaml
+- name: Install rancher rke2
+  hosts: k8s_cluster
+  become: true
+  vars:
+    rke2_ha_mode: true
+    rke2_api_ip : 192.168.10.100
+    rke2_server_taint: true
+    rke2_download_kubeconf: true
+  roles:
+  - role: rke2
 ```
-ERROR! this task 'ansible.builtin.include_tasks' has extra params, which is only allowed in the following modules: shell, group_by, include_vars, script, command, include, include_role, import_tasks, win_command, win_shell, add_host, import_role, raw, set_fact, meta, include_tasks
 
-The error appears to be in '/usr/local/src/rke2/roles/rke2/tasks/main.yml': line 3, column 3, but may
-be elsewhere in the file depending on the exact syntax problem.
+- If you want to upgrade to version 1.28 you have to add this line then run playbooks.
 
-The offending line appears to be:
-
-
-- name: Install Keepalived when HA mode is enabled
-  ^ here
-
-```
-
-
-# This requires internet outbound
-
-```
-fatal: [master-02]: FAILED! => {"changed": false, "msg": "Failed to update apt cache: unknown reason"}
+```yaml
+- name: Install rancher rke2
+  hosts: k8s_cluster
+  become: true
+  vars:
+    rke2_version: v1.28.5+rke2r1   #add the version you want to upgrade
+    rke2_ha_mode: true
+    rke2_api_ip : 192.168.10.100
+    rke2_server_taint: true
+    rke2_download_kubeconf: true
+  roles:
+  - role: rke2
 ```
